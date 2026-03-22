@@ -210,11 +210,6 @@ export const readOneJobService = async (jobId) => {
 // FETCH ALL JOB
 export const readAllJobService = async (search = "", status = "", type = "") => {
     try {
-        console.log({
-            search,
-            status,
-            type
-        })
 
         // Build job filters
         const jobWhere = {};

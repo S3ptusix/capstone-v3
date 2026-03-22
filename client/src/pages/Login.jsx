@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "../hooks/form";
 import { fetchUser, handleLogin } from "../services/authServices";
+import VerifyEmail from "../components/verifyEmail";
 import { useContext } from "react";
 import { UserContext } from "../context/AuthProvider";
 import Input from "../components/ui/Input";
@@ -14,48 +15,29 @@ export default function Login() {
 
     const navigate = useNavigate();
 
-    const { formData, handleInputChange: handleInputChangeOriginal } = useForm({
+    const [openVerifyEmail, setOpenVerifyEmail] = useState(false);
+
+    const { formData, handleInputChange } = useForm({
         email: '',
         password: ''
     });
 
     const [errorMessage, setErrorMessage] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-
-    const handleInputChange = (e) => {
-        handleInputChangeOriginal(e);
-        setErrorMessage('');
-    };
 
     const handleSubmit = async () => {
         try {
-            if (isLoading) return;
-
-            if (!formData.email || !formData.password) {
-                setErrorMessage('Please enter both email and password');
-                return;
-            }
-
-            setIsLoading(true);
-            const { success, message } = await handleLogin(formData);
+            const { success, message, isVerified } = await handleLogin(formData);
             if (success) {
                 const result = await fetchUser();
-                if (result) {
-                    setUser(result);
-                    setIsLoading(false);
-                    navigate('/dashboard');
-                } else {
-                    setErrorMessage('Failed to fetch user information. Please try again.');
-                    setIsLoading(false);
-                }
+                setUser(result);
+                navigate('/home');
             } else {
                 setErrorMessage(message);
-                setIsLoading(false);
+                if (isVerified) return setOpenVerifyEmail(true);
+
             }
         } catch (error) {
             console.error('Error on handleSubmit:', error);
-            setErrorMessage('An unexpected error occurred. Please try again.');
-            setIsLoading(false);
         }
     }
 
@@ -114,17 +96,24 @@ export default function Login() {
                 </div>
 
                 <button
-                    className="btn bg-emerald-500 text-white py-6 w-full rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="btn bg-emerald-500 text-white py-6 w-full rounded-lg"
                     onClick={handleSubmit}
-                    disabled={isLoading}
                 >
-                    {isLoading ? 'Signing in...' : 'Sign in'}
+                    Sign in
                 </button>
 
                 <hr className="border-gray-200 my-4" />
 
                 <p className="text-gray-500 text-center">Don't have an account? <Link to={'/register'}><span className="text-emerald-500">Sign up</span></Link></p>
             </div>
+
+            {openVerifyEmail &&
+                <VerifyEmail
+                    onClose={() => setOpenVerifyEmail(false)}
+                    email={formData.email}
+                    successFunction={() => navigate('/home')}
+                />
+            }
         </div>
     )
 }

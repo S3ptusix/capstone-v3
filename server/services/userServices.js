@@ -54,8 +54,7 @@ export const userRegistrationService = async (fullname, email, password, confirm
             email,
             password: hashedPassword,
             otp,
-            otpExpireAt,
-            isVerified: 'yes'  // Auto-verify on registration
+            otpExpireAt
         });
 
         // TODO: send OTP via email/SMS

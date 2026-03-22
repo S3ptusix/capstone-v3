@@ -10,8 +10,6 @@ export const fetchAllHiredService = async (search = "") => {
             isRejected: "No"
         };
 
-        console.log({ search });
-
         if (search) {
             applicantWhere[Op.or] = [
                 { fullname: { [Op.like]: `%${search}%` } },
