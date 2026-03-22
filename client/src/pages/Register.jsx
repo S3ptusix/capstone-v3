@@ -1,15 +1,17 @@
 import { ArrowLeft } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { handleRegister } from "../services/authServices";
 import { useForm } from "../hooks/form";
 import { useState } from "react";
+import VerifyEmail from "../components/verifyEmail";
 import Input from "../components/ui/Input";
 import ErrorMessage from "../components/ui/ErrorMessage";
 
 export default function Register() {
-    const navigate = useNavigate();
+    const [openVerifyEmail, setOpenVerifyEmail] = useState(false);
 
-    const { formData, handleInputChange: handleInputChangeOriginal } = useForm({
+
+    const { formData, handleInputChange } = useForm({
         fullname: '',
         email: '',
         password: '',
@@ -17,51 +19,17 @@ export default function Register() {
     });
 
     const [errorMessage, setErrorMessage] = useState('');
-    const [successMessage, setSuccessMessage] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-
-    const handleInputChange = (e) => {
-        handleInputChangeOriginal(e);
-        setErrorMessage('');
-        setSuccessMessage('');
-    };
 
     const handleSubmit = async () => {
         try {
-            if (isLoading) return;
-
-            if (!formData.fullname || !formData.email || !formData.password || !formData.confirmPassword) {
-                setErrorMessage('Please fill in all fields');
-                return;
-            }
-
-            if (formData.password !== formData.confirmPassword) {
-                setErrorMessage('Passwords do not match');
-                return;
-            }
-
-            if (formData.password.length < 8) {
-                setErrorMessage('Password must be at least 8 characters long');
-                return;
-            }
-
-            setIsLoading(true);
             const { success, message } = await handleRegister(formData);
             if (success) {
-                setErrorMessage('');
-                setSuccessMessage('Account created successfully! Redirecting to login...');
-                setTimeout(() => {
-                    navigate('/login');
-                }, 2000);
+                setOpenVerifyEmail(true);
             } else {
-                setSuccessMessage('');
-                setErrorMessage(message || 'Failed to create account');
-                setIsLoading(false);
+                setErrorMessage(message);
             }
         } catch (error) {
             console.error('Error on handleSubmit:', error);
-            setErrorMessage('An unexpected error occurred. Please try again.');
-            setIsLoading(false);
         }
     }
 
@@ -117,7 +85,6 @@ export default function Register() {
                         value={formData.password}
                         onChange={handleInputChange}
                     />
-                    <p className="text-xs text-gray-500 mt-1">Must contain: 8+ chars, uppercase, lowercase, number, special char (!@#$%^&*)</p>
                 </div>
 
                 <div className="mb-4">
@@ -138,24 +105,24 @@ export default function Register() {
                     </div>
                 }
 
-                {successMessage &&
-                    <div className="mb-4 flex items-center justify-center bg-emerald-500/10 text-emerald-600 p-3 rounded-lg font-semibold">
-                        ✓ {successMessage}
-                    </div>
-                }
-
                 <button
-                    className="btn bg-emerald-500 text-white py-6 w-full rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="btn bg-emerald-500 text-white py-6 w-full rounded-lg"
                     onClick={handleSubmit}
-                    disabled={isLoading}
                 >
-                    {isLoading ? 'Creating Account...' : 'Create Account'}
+                    Create Account
                 </button>
 
                 <hr className="border-gray-200 my-4" />
 
                 <p className="text-gray-500 text-center">Already have an account? <Link to={'/login'}><span className="text-emerald-500">Sign in</span></Link></p>
             </div>
+
+            {openVerifyEmail &&
+                <VerifyEmail
+                    onClose={() => setOpenVerifyEmail(false)}
+                    email={formData.email}
+                />
+            }
         </div>
     )
 }

@@ -4,6 +4,7 @@ import { UserContext } from "../context/AuthProvider";
 import { useNavigate } from "react-router-dom";
 import { logoutAdmin } from "../services/authServices";
 import useSocket from "../hooks/useSocket";
+import Profile from "./Profile";
 
 export default function Topbar() {
 
@@ -14,6 +15,8 @@ export default function Topbar() {
 
     const [openMenu, setOpenMenu] = useState(false);
     const [showNotifications, setShowNotifications] = useState(false);
+
+    const [openProfile, setOpenProfile] = useState(false);
 
     const handleLogout = async () => {
         try {
@@ -45,7 +48,7 @@ export default function Topbar() {
             </button>
 
             <div className="flex items-center gap-4">
-                <button 
+                <button
                     className="relative btn btn-square btn-ghost hover:bg-gray-200"
                     onClick={() => setShowNotifications(!showNotifications)}
                 >
@@ -98,13 +101,12 @@ export default function Topbar() {
                         <p className="font-semibold text-sm pb-2">My Account</p>
                         <p className="text-sm text-gray-500">{admin?.email}</p>
                     </div>
-                    <button className="flex items-center gap-2 p-2 text-sm cursor-pointer w-full hover:bg-gray-200">
+                    <button
+                        className="flex items-center gap-2 p-2 text-sm cursor-pointer w-full hover:bg-gray-200"
+                        onClick={() => setOpenProfile(true)}
+                    >
                         <User size={16} />
                         Profile
-                    </button>
-                    <button className="border-b border-gray-300 flex items-center gap-2 p-2 text-sm cursor-pointer w-full hover:bg-gray-200">
-                        <Settings size={16} />
-                        Settings
                     </button>
                     <button
                         className="flex items-center gap-2 p-2 text-sm text-red-500 cursor-pointer w-full hover:bg-red-200"
@@ -114,6 +116,9 @@ export default function Topbar() {
                         Logout
                     </button>
                 </div>
+            }
+            {openProfile &&
+                <Profile onClose={() => setOpenProfile(false)} />
             }
         </div>
     )

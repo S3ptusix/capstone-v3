@@ -3,19 +3,13 @@
 import { useEffect } from "react";
 import Topbar from "../components/Topbar";
 import Input from "../components/ui/Input";
-import TagInput from "../components/ui/TagInput";
-import Textarea from "../components/ui/Textarea";
 import { Link } from "react-router-dom";
 import { editUserProfile, fetchUserProfile } from "../services/userServices";
 import { useForm } from "../hooks/form";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import VerifyEmail from "../components/VerifyEmail";
 
 export default function Profile() {
-
-    const [errorMessage, setErrorMessage] = useState('');
-    const [openOTPVerification, setOpenOTPVerification] = useState(false);
 
     const { formData, setFormData, handleInputChange } = useForm({
         fullname: '',
@@ -28,14 +22,10 @@ export default function Profile() {
         try {
             const { success, message } = await editUserProfile(formData);
             if (success) return toast.success(message);
-            setErrorMessage(message);
+            toast.error(message);
         } catch (error) {
             console.error('Error on handleSubmit:', error);
         }
-    }
-
-    const handleEnableOTP = () => {
-        setOpenOTPVerification(true);
     }
 
     useEffect(() => {
@@ -43,6 +33,7 @@ export default function Profile() {
             try {
                 const { success, message, user } = await fetchUserProfile();
                 if (success) return setFormData(user);
+                console.error(message);
             } catch (error) {
                 console.error('Error on loadProfile:', error);
             }
@@ -96,40 +87,7 @@ export default function Profile() {
                         />
                     </div>
                 </section>
-
-                <section className="rounded-xl border border-gray-200 p-4 mb-8">
-                    <p className="text-lg font-semibold mb-2">Security Settings</p>
-                    <p className="text-gray-500 text-sm mb-4">Enhance your account security with two-factor authentication</p>
-                    
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="font-semibold text-gray-700">Email Verification (OTP)</p>
-                            <p className="text-sm text-gray-500">Receive a one-time password via email for additional security</p>
-                        </div>
-                        <button
-                            className="btn bg-emerald-500 text-white rounded-lg px-6"
-                            onClick={handleEnableOTP}
-                        >
-                            Enable
-                        </button>
-                    </div>
-                </section>
-
-                {/* <section className="rounded-xl border border-gray-200 p-4 mb-8">
-                    <p className="text-lg font-semibold mb-2">Resume / CV</p>
-                    <p className="text-gray-500 text-sm mb-4">Upload your resume to apply faster</p>
-                 </section> */}
             </div>
-
-            {openOTPVerification &&
-                <VerifyEmail
-                    onClose={() => setOpenOTPVerification(false)}
-                    email={formData?.email}
-                    successFunction={() => {
-                        toast.success('Email verification enabled successfully!');
-                    }}
-                />
-            }
         </div>
     )
 }
