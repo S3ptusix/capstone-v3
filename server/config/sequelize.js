@@ -31,7 +31,7 @@ const connectToDatabase = async () => {
     try {
         await sequelize.authenticate();
         // Sync and alter tables to match models
-        await sequelize.sync({ alter: true });
+        await sequelize.sync();
         console.log('Database connection has been established successfully. Models are synced and altered.');
     } catch (error) {
         console.error('Unable to connect to the database:', error);

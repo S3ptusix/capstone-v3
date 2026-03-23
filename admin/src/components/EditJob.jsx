@@ -42,10 +42,10 @@ export default function EditJob({ jobId, onClose = () => { }, loadTable = () => 
     const handleSubmit = async () => {
         // Prevent double submission
         if (isSubmitting) return;
-        
+
         setIsSubmitting(true);
         setErrorMessage('');
-        
+
         try {
             const { success, message } = await editJob(jobId, formData);
             if (success) {
@@ -129,7 +129,7 @@ export default function EditJob({ jobId, onClose = () => { }, loadTable = () => 
                         name="companyId"
                         placeholder="Select Company"
                         value={formData.companyId}
-                        options={selectCompanies.map(company => ({ value: company.id, name: company.companyName }))}
+                        options={selectCompanies?.map(company => ({ value: company.id, name: company.companyName }))}
                         onChange={handleInputChange}
                     />
                 </div>
@@ -141,7 +141,7 @@ export default function EditJob({ jobId, onClose = () => { }, loadTable = () => 
                         name="employmentType"
                         placeholder="Select Employment Type"
                         value={formData.employmentType}
-                        options={employmentTypes.map(type => ({ value: type, name: type }))}
+                        options={employmentTypes}
                         onChange={handleInputChange}
                     />
                 </div>

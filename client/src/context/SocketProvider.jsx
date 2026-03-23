@@ -1,3 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react-refresh/only-export-components */
+/* eslint-disable no-unused-vars */
 import { createContext, useEffect, useState, useCallback } from 'react';
 import io from 'socket.io-client';
 
@@ -20,12 +23,12 @@ export function SocketProvider({ children }) {
         });
 
         newSocket.on('connect', () => {
-            console.log('🟢 Client connected to Socket.IO');
+            // console.log('🟢 Client connected to Socket.IO');
             setIsConnected(true);
         });
 
         newSocket.on('disconnect', () => {
-            console.log('🔴 Client disconnected from Socket.IO');
+            // console.log('🔴 Client disconnected from Socket.IO');
             setIsConnected(false);
         });
 

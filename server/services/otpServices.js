@@ -11,7 +11,7 @@ export const otpVerifyService = async (email, otp) => {
 
         const user = await Users.findOne({ where: { email } });
 
-        if (!user) return { success: false, message: "user not found" };
+        if (!user) return { success: false, message: "Invalid OTP" };
 
         // Check expiration
         if (new Date() > user.otpExpireAt) {

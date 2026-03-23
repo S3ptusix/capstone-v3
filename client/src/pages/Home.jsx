@@ -1,7 +1,6 @@
-import { ArrowRight, MapPin, Search, Shield, Target, TrendingUp, Users, Zap } from "lucide-react";
+import { MapPin, Search, Shield, Target, Users, Zap } from "lucide-react";
 import Topbar from "../components/Topbar";
 import { Link, useNavigate } from "react-router-dom";
-import Card from "../components/Card";
 import { useState, useEffect } from "react";
 import { locations } from "../utils/locations";
 import { readJobPosting } from "../services/jobServices";
@@ -214,13 +213,13 @@ export default function Home() {
                                     </div>
                                 )}
                             </div>
-                            <button 
+                            <button
                                 onClick={() => {
-                                    navigate('/jobposting', { 
-                                        state: { 
-                                            searchJob, 
-                                            searchCity 
-                                        } 
+                                    navigate('/jobposting', {
+                                        state: {
+                                            searchJob,
+                                            searchCity
+                                        }
                                     });
                                 }}
                                 className="py-6 btn bg-emerald-500 text-white w-full rounded-lg"
