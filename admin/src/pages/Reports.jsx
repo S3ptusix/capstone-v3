@@ -1,4 +1,4 @@
-import { Briefcase, Building2, FileText, TrendingDown, TrendingUp, Users, Loader } from "lucide-react";
+import { Briefcase, Building2, FileText, TrendingDown, Users, Loader } from "lucide-react";
 import HiringTrendsAnalysisComponent from "../components/HiringTrendsAnalysisComponent";
 import Sidemenu from "../components/Sidemenu";
 import Topbar from "../components/topbar";
@@ -11,14 +11,16 @@ import { exportReportToDocx } from "../services/reportsServices";
 import { useState, useEffect } from "react";
 import Select from "../components/ui/Select";
 import { toast } from "react-toastify";
-import useSocket from "../hooks/useSocket";
+import Input from "../components/ui/Input";
+import { getCurrentMonth } from "../utils/tools";
 
 export default function Reports() {
 
     const [company, setCompany] = useState('');
+    const [monthYear, setMonthYear] = useState(getCurrentMonth);
+
     const [selectCompanies, setSelectCompanies] = useState([]);
     const [isExporting, setIsExporting] = useState(false);
-    const { isConnected, notifications } = useSocket();
 
     useEffect(() => {
         const runFetchAllCompany = async () => {
@@ -36,13 +38,13 @@ export default function Reports() {
     const handleExportDocx = async () => {
         setIsExporting(true);
         const result = await exportReportToDocx(company || null);
-        
+
         if (result.success) {
             toast.success('Report exported successfully!');
         } else {
             toast.error(result.message);
         }
-        
+
         setIsExporting(false);
     }
 
@@ -52,14 +54,6 @@ export default function Reports() {
             <div className="grow max-h-screen flex flex-col overflow-auto">
                 <Topbar />
                 <div className="p-8 overflow-autos grow">
-
-                    {/* Socket.IO Status Indicator */}
-                    <div className="mb-4 flex items-center gap-2">
-                        <div className={`w-3 h-3 rounded-full ${isConnected ? 'bg-green-500' : 'bg-red-500'}`}></div>
-                        <span className="text-sm text-gray-600">
-                            {isConnected ? 'Real-time updates connected' : 'Reconnecting...'}
-                        </span>
-                    </div>
 
                     {/* report header */}
                     <section className="flex items-center justify-between flex-wrap gap-4 mb-8">
@@ -101,16 +95,11 @@ export default function Reports() {
                                 onChange={(e) => setCompany(e.target.value)}
                             />
 
-                            <select
-                                name="industry"
-                                className="select grow"
-                            >
-                                <option value="30">Last 30 Days</option>
-                                <option value="90">Last 90 Days</option>
-                                <option value="180">Last 180 Days</option>
-                                <option value="365">Last 365 Days</option>
-                                <option value="All Time">All Time</option>
-                            </select>
+                            <Input
+                                type="month"
+                                value={monthYear}
+                                onChange={(e) => setMonthYear(e.target.value)}
+                            />
                         </div>
                     </section>
 
@@ -121,9 +110,6 @@ export default function Reports() {
                                 <Users size={16} className="text-emerald-500 shrink-0" />
                             </div>
                             <p className="font-bold text-2xl mb-2">89</p>
-                            <p className="flex gap-2 text-xs items-center"><TrendingUp size={12} className="text-emerald-500" />
-                                <span className="text-emerald-500">+18.2%</span> from last period
-                            </p>
                         </div>
                         <div className="border border-gray-300 px-4 py-6 rounded-xl">
                             <div className="flex items-center justify-between mb-8">
@@ -131,9 +117,6 @@ export default function Reports() {
                                 <Briefcase size={16} className="text-emerald-500 shrink-0" />
                             </div>
                             <p className="font-bold text-2xl">2847</p>
-                            <p className="flex gap-2 text-xs items-center"><TrendingUp size={12} className="text-emerald-500" />
-                                <span className="text-emerald-500">+24.5%</span> from last period
-                            </p>
                         </div>
                         <div className="border border-gray-300 px-4 py-6 rounded-xl">
                             <div className="flex items-center justify-between mb-8">
@@ -141,9 +124,6 @@ export default function Reports() {
                                 <Building2 size={16} className="text-emerald-500 shrink-0" />
                             </div>
                             <p className="font-bold text-2xl">47</p>
-                            <p className="flex gap-2 text-xs items-center"><TrendingUp size={12} className="text-emerald-500" />
-                                <span className="text-emerald-500">+6.8%</span> from last period
-                            </p>
                         </div>
                         <div className="border border-gray-300 px-4 py-6 rounded-xl">
                             <div className="flex items-center justify-between mb-8">
@@ -151,9 +131,6 @@ export default function Reports() {
                                 <TrendingDown size={16} className="text-emerald-500 shrink-0" />
                             </div>
                             <p className="font-bold text-2xl">12.5%</p>
-                            <p className="flex gap-2 text-xs items-center"><TrendingDown size={12} className="text-red-500" />
-                                <span className="text-red-500">-4.3%</span> from last period
-                            </p>
                         </div>
                     </section>
 
@@ -206,7 +183,6 @@ export default function Reports() {
                             <p className="font-semibold">Avg. Time to Hire</p>
                             <p className="text-gray-500 mb-4">From application to offer</p>
                             <p className="font-bold text-3xl text-emerald-500 mb-2">18 days</p>
-                            <p className="text-gray-500 mb-4">3 days faster than last period</p>
                         </div>
                         <div className="border border-gray-300 p-4 rounded-xl">
                             <p className="font-semibold">Interview Success Rate</p>

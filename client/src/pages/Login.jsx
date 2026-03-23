@@ -8,6 +8,7 @@ import { useContext } from "react";
 import { UserContext } from "../context/AuthProvider";
 import Input from "../components/ui/Input";
 import ErrorMessage from "../components/ui/ErrorMessage";
+import { validateEmail } from "../utils/validate";
 
 export default function Login() {
 
@@ -90,9 +91,13 @@ export default function Login() {
                 }
 
                 <div className="flex justify-end mb-4">
-                    <Link>
-                        <p className="text-emerald-500 font-semibold">Forgot password?</p>
-                    </Link>
+                    <button
+                        disabled={!validateEmail(formData.email)}
+                        className="disabled:pointer-events-none disabled:opacity-50 disabled:text-gray-500 text-emerald-500 font-semibold cursor-pointer"
+                        onClick={() => setOpenVerifyEmail(true)}
+                    >
+                        Forgot password?
+                    </button>
                 </div>
 
                 <button
@@ -111,7 +116,6 @@ export default function Login() {
                 <VerifyEmail
                     onClose={() => setOpenVerifyEmail(false)}
                     email={formData.email}
-                    successFunction={() => navigate('/home')}
                 />
             }
         </div>

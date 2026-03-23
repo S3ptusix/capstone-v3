@@ -215,7 +215,7 @@ export default function Jobs() {
                                                 <p className={`status-style text-white ${job?.status === 'open' ? 'bg-emerald-500' : 'bg-red-500'}`}>{job?.status}</p>
                                             </td>
                                             <td>
-                                                <p>{cleanDateTime(job?.postedAt)}</p>
+                                                <p>{job?.postedAt ? cleanDateTime(job?.postedAt) : '-'}</p>
                                             </td>
                                             <td>
                                                 <div className="relative flex-center">

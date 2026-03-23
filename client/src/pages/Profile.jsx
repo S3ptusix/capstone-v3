@@ -1,12 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-unused-vars */
 import { useEffect } from "react";
 import Topbar from "../components/Topbar";
 import Input from "../components/ui/Input";
 import { Link } from "react-router-dom";
 import { editUserProfile, fetchUserProfile } from "../services/userServices";
 import { useForm } from "../hooks/form";
-import { useState } from "react";
 import { toast } from "react-toastify";
 
 export default function Profile() {

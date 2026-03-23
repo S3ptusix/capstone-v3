@@ -1,4 +1,3 @@
-import { sequelize } from '../config/sequelize.js';
 import Company from '../models/Company.js';
 import Job from '../models/Job.js';
 import Admin from '../models/Admin.js';

@@ -1,4 +1,4 @@
-import { Briefcase, ChevronsLeft, ChevronsRight, MapPin, Search } from "lucide-react";
+import { Briefcase, ChevronsLeft, ChevronsRight, Search } from "lucide-react";
 import Topbar from "../components/Topbar";
 import { useState, useEffect } from "react";
 import { industries } from "../utils/data";

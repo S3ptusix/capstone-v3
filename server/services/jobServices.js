@@ -3,6 +3,7 @@ import { employmentTypes } from '../utils/data.js';
 import { normalizeArray, removeUnnecessarySpaces } from '../utils/format.js';
 import Admins from '../models/Admin.js';
 import { Sequelize, Op } from "sequelize";
+import { getCurrentDateTime } from '../utils/tools.js';
 
 // CREATE JOB
 export const createJobService = async (
@@ -374,7 +375,8 @@ export const editJobStatusService = async (
         status = status === 'open' ? 'closed' : 'open';
 
         await Jobs.update({
-            status
+            status,
+            postedAt: status === 'open' ? getCurrentDateTime() : null
         }, {
             where: { id: jobId }
         });

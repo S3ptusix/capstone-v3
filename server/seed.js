@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { sequelize, connectToDatabase } from './config/sequelize.js';
+import { connectToDatabase } from './config/sequelize.js';
 import Admins from './models/Admin.js';
 import Users from './models/User.js';
 import dotenv from 'dotenv';
@@ -25,7 +25,7 @@ const seedDefaultAccounts = async () => {
         } else {
             // Create default admin
             const hashedAdminPassword = await bcrypt.hash('Admin@12345', 10);
-            
+
             await Admins.create({
                 fullname: 'System Administrator',
                 email: 'admin@capstone.com',
@@ -41,7 +41,7 @@ const seedDefaultAccounts = async () => {
         } else {
             // Create default client user
             const hashedClientPassword = await bcrypt.hash('Client@12345', 10);
-            
+
             await Users.create({
                 fullname: 'Test Client',
                 email: 'client@capstone.com',

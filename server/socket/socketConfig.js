@@ -13,7 +13,8 @@ export const setupSocket = (app) => {
 
     // Real-time events
     io.on('connection', (socket) => {
-        console.log('🔌 User connected:', socket.id);
+        // console.log('🔌 User connected:', socket.id);
+        console.log('🔌 User connected');
 
         // Applicant status update
         socket.on('applicant-updated', (data) => {
@@ -41,7 +42,8 @@ export const setupSocket = (app) => {
         });
 
         socket.on('disconnect', () => {
-            console.log('🔌 User disconnected:', socket.id);
+            // console.log('🔌 User disconnected:', socket.id);
+            console.log('🔌 User disconnected');
         });
     });
 

@@ -1,10 +1,7 @@
-/* eslint-disable no-unused-vars */
 import Topbar from "../components/Topbar";
-import { Briefcase, FileText, SquarePen } from "lucide-react";
+import { Briefcase, FileText, LogOut, SquarePen } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { readOneJob } from "../services/jobServices";
 import { useEffect, useState } from "react";
-import Card from "../components/Card";
 import ApplicationCard from "../components/ApplicationCard";
 import ApplicationDetailsModal from "../components/ApplicationDetailsModal";
 import { logoutUser } from "../services/authServices";
@@ -17,26 +14,9 @@ export default function Dashboard() {
     const { user, setUser } = useContext(UserContext);
 
     const navigate = useNavigate();
-
-    const [showJobDetails, setShowJobDetails] = useState(false);
-    const [jobDetails, setJobDetails] = useState(null);
     const [recentApplications, setRecentApplications] = useState([]);
     const [showApplicationDetails, setShowApplicationDetails] = useState(false);
     const [selectedApplication, setSelectedApplication] = useState(null);
-
-    const handleShowJobDetails = async (id) => {
-        try {
-            const { success, job, message } = await readOneJob(id);
-            if (success) {
-                setJobDetails(job);
-                setShowJobDetails(true);
-            } else {
-                console.error(message);
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    }
 
     const handleLogout = async () => {
         try {
@@ -63,7 +43,6 @@ export default function Dashboard() {
             console.error(error);
         }
     }, [])
-
 
     return (
         <div className="flex flex-col max-h-screen">
@@ -149,17 +128,11 @@ export default function Dashboard() {
                         </div>
 
                         <div className="flex flex-col rounded-xl border border-gray-200 p-4">
-                            <p className="text-lg font-semibold mb-2">Account Settings</p>
-
-
-                            <button className="w-fit font-semibold cursor-pointer mb-2">
-                                Change Password
-                            </button>
                             <button
-                                className="w-fit font-semibold cursor-pointer text-red-500"
+                                className="flex gap-2 items-center w-fit font-semibold cursor-pointer text-red-500"
                                 onClick={handleLogout}
                             >
-                                Sign out
+                                <LogOut size={16} /> Sign out
                             </button>
                         </div>
                     </div>
